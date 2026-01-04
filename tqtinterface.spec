@@ -9,8 +9,8 @@
 %if "%{?tde_version}" == ""
 %define tde_version 14.1.5
 %endif
-%define pkg_rel 2
 %define tde_pkg tqtinterface
+%define pkg_rel 3
 
 %define libtqt4 %{_lib}tqt4
 
@@ -33,12 +33,11 @@ URL:		http://www.trinitydesktop.org/
 
 License:	GPLv2+
 
-#Vendor:		Trinity Project
-#Packager:	Francois Andriot <francois.andriot@free.fr>
 
 Source0:	https://mirror.ppa.trinitydesktop.org/trinity/releases/R%{tde_version}/main/dependencies/%{tarball_name}-%{tde_version}%{?preversion:~%{preversion}}.tar.xz
 
 BuildSystem:    cmake
+
 BuildOption:    -DCMAKE_BUILD_TYPE="RelWithDebInfo"
 BuildOption:    -DQTDIR="%{_datadir}/tqt3"
 BuildOption:    -DQT_INCLUDE_DIR="%{_includedir}/tqt3"
