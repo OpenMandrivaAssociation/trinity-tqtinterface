@@ -1,18 +1,14 @@
 %bcond clang 1
 
-# BUILD WARNING:
-#  Remove qt-devel and qt3-devel and any kde*-devel on your system !
-#  Having KDE libraries may cause FTBFS here !
-
 # TDE variables
 %define tde_epoch 2
 %if "%{?tde_version}" == ""
 %define tde_version 14.1.5
 %endif
 %define tde_pkg tqtinterface
-%define pkg_rel 3
 
-%define libtqt4 %{_lib}tqt4
+%define libname %mklibname tqt4
+%define devname %mklibname tqt4 -d
 
 %undefine __brp_remove_la_files
 %define dont_remove_libtool_files 1
@@ -26,15 +22,14 @@
 Name:		trinity-%{tde_pkg}
 Epoch:		%{tde_epoch}
 Version:	4.2.0
-Release:	%{?tde_version}_%{?!preversion:%{pkg_rel}}%{?preversion:0_%{preversion}}%{?dist}
+Release:	%{?tde_version:%{tde_version}_}4
 Summary:	The Trinity Qt Interface Libraries
 Group:		System/GUI/Other
 URL:		http://www.trinitydesktop.org/
 
 License:	GPLv2+
 
-
-Source0:	https://mirror.ppa.trinitydesktop.org/trinity/releases/R%{tde_version}/main/dependencies/%{tarball_name}-%{tde_version}%{?preversion:~%{preversion}}.tar.xz
+Source0:	https://mirror.ppa.trinitydesktop.org/trinity/releases/R%{tde_version}/main/dependencies/%{tarball_name}-%{tde_version}.tar.xz
 
 BuildSystem:    cmake
 
@@ -47,8 +42,7 @@ BuildOption:    -DWITH_QT3="ON"
 BuildOption:    -DBUILD_ALL="ON"
 BuildOption:    -DUSE_QT3="ON"
 
-BuildRequires:	libtqt3-mt-devel >= 3.5.0
-BuildRequires:	tqt3-dev-tools >= 3.5.0
+BuildRequires:	pkgconfig(tqt-mt)
 BuildRequires:	trinity-tde-cmake >= %{tde_version}
 
 %{!?with_clang:BuildRequires:	gcc-c++}
@@ -78,61 +72,40 @@ although some code has been added for useful functions that are no longer part o
 
 ##########
 
-%package -n %{libtqt4}
+%package -n %{libname}
 Group:		System/GUI/Other
 Summary:	The Trinity Qt Interface Libraries
-Provides:	libtqt4 = %{?epoch:%{epoch}:}%{version}-%{release}
 
-Requires:	libtqt3-mt >= 3.5.0
+Requires:	%{_lib}tqt3-mt >= 3.5.0
 
-Obsoletes:	trinity-tqtinterface < %{?epoch:%{epoch}:}%{version}-%{release}
-Provides:	trinity-tqtinterface = %{?epoch:%{epoch}:}%{version}-%{release}
-
-%description -n %{libtqt4}
+%description -n %{libname}
 The Trinity Qt Interface is a library that abstracts Qt from Trinity.
 This allows the Trinity code to rapidly port from one version of Qt to another.
 This is primarily accomplished by defining old functions in terms of new functions,
 although some code has been added for useful functions that are no longer part of Qt.
 
-%files -n %{libtqt4}
+%files -n %{libname}
 %defattr(-,root,root,-)
 %{_libdir}/libtqt.so.4
 %{_libdir}/libtqt.so.4.2.0
 
-%post -n %{libtqt4}
-/sbin/ldconfig || :
-
-%postun -n %{libtqt4}
-/sbin/ldconfig || :
-
 ##########
 
-%package -n %{libtqt4}-devel
+%package -n %{devname}
 Group:		Development/Libraries/X11
 Summary:	The Trinity Qt Interface Libraries (Development Files)
-Provides:	libtqt4-devel = %{?epoch:%{epoch}:}%{version}-%{release}
 
-Requires:	%{libtqt4} = %{?epoch:%{epoch}:}%{version}-%{release}
-Requires:	libtqt3-mt-devel >= 3.5.0
+Requires:	%{libname} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:	tqt3-dev-tools >= 3.5.0
 Requires:	trinity-tde-cmake >= %{version}-%{release}
 
-Obsoletes:	trinity-tqtinterface-devel < %{?epoch:%{epoch}:}%{version}-%{release}
-Provides:	trinity-tqtinterface-devel = %{?epoch:%{epoch}:}%{version}-%{release}
-
-%description -n %{libtqt4}-devel
+%description -n %{devname}
 The Trinity Qt Interface is a library that abstracts Qt from Trinity.
 This allows the Trinity code to rapidly port from one version of Qt to another.
 This is primarily accomplished by defining old functions in terms of new functions,
 although some code has been added for useful functions that are no longer part of Qt.
 
-%post -n %{libtqt4}-devel
-/sbin/ldconfig || :
-
-%postun -n %{libtqt4}-devel
-/sbin/ldconfig || :
-
-%files -n %{libtqt4}-devel
+%files -n %{devname}
 %defattr(-,root,root,-)
 %{_bindir}/convert_qt_tqt1
 %{_bindir}/convert_qt_tqt2
