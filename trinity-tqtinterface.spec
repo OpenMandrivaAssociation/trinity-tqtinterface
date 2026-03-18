@@ -1,10 +1,10 @@
 %bcond clang 1
 
 # TDE variables
-%define tde_epoch 2
 %if "%{?tde_version}" == ""
 %define tde_version 14.1.5
 %endif
+
 %define tde_pkg tqtinterface
 
 %define libname %mklibname tqt4
@@ -20,7 +20,6 @@
 %define tarball_name %{tde_pkg}-trinity
 
 Name:		trinity-%{tde_pkg}
-Epoch:		%{tde_epoch}
 Version:	4.2.0
 Release:	%{?tde_version:%{tde_version}_}4
 Summary:	The Trinity Qt Interface Libraries
@@ -76,8 +75,6 @@ although some code has been added for useful functions that are no longer part o
 Group:		System/GUI/Other
 Summary:	The Trinity Qt Interface Libraries
 
-Requires:	%{_lib}tqt3-mt >= 3.5.0
-
 %description -n %{libname}
 The Trinity Qt Interface is a library that abstracts Qt from Trinity.
 This allows the Trinity code to rapidly port from one version of Qt to another.
@@ -95,9 +92,7 @@ although some code has been added for useful functions that are no longer part o
 Group:		Development/Libraries/X11
 Summary:	The Trinity Qt Interface Libraries (Development Files)
 
-Requires:	%{libname} = %{?epoch:%{epoch}:}%{version}-%{release}
-Requires:	tqt3-dev-tools >= 3.5.0
-Requires:	trinity-tde-cmake >= %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
 
 %description -n %{devname}
 The Trinity Qt Interface is a library that abstracts Qt from Trinity.
