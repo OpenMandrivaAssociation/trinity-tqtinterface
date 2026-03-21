@@ -43,6 +43,7 @@ BuildOption:    -DUSE_QT3="ON"
 
 BuildRequires:	pkgconfig(tqt-mt)
 BuildRequires:	trinity-tde-cmake >= %{tde_version}
+BuildRequires:  tqt3-dev-tools
 
 %{!?with_clang:BuildRequires:	gcc-c++}
 BuildRequires:	pkgconfig
